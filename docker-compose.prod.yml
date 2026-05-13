@@ -1,0 +1,53 @@
+services:
+  # Laravel App (Production)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: fleet-manager-prod-app
+    container_name: fleet-prod-app
+    restart: always
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+    volumes:
+      - .:/var/www
+    networks:
+      - fleet-prod-network
+
+  # Nginx (Serving both API and React)
+  nginx:
+    image: nginx:alpine
+    container_name: fleet-prod-nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - .:/var/www
+      - ./admin-dashboard/dist:/var/www/admin-dashboard/dist
+      - ./docker/nginx/conf.d/production.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - fleet-prod-network
+
+  # PostGIS DB
+  db:
+    image: postgis/postgis:15-3.3-alpine
+    container_name: fleet-prod-db
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - fleet-prod-db-data:/var/lib/postgresql/data
+    networks:
+      - fleet-prod-network
+
+networks:
+  fleet-prod-network:
+    driver: bridge
+
+volumes:
+  fleet-prod-db-data:
+    driver: local
