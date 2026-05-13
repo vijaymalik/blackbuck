@@ -1,0 +1,17 @@
+node_modules
+admin-dashboard/node_modules
+admin-dashboard/dist
+vendor
+.git
+.env
+.env.backup
+.env.production
+storage/*.key
+storage/logs
+docker/nginx/conf.d/*.conf
+!docker/nginx/conf.d/default.conf
+!docker/nginx/conf.d/production.conf
+Dockerfile
+docker-compose.yml
+docker-compose.prod.yml
+README.md
