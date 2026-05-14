@@ -5,7 +5,8 @@ import Layout from './components/Layout';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Drivers from './pages/Drivers';
-import Users from './pages/Users';
+import Users from './pages/users/Users';
+import AddUser from './pages/users/AddUser';
 import './App.css';
 
 const ProtectedRoute = ({ children }) => {
@@ -34,6 +35,7 @@ function App() {
             <Route path="drivers" element={<Drivers />} />
             <Route path="users" element={<Users />} />
             <Route path="settings" element={<div>Settings Component</div>} />
+            <Route path="users/create" element={<AddUser />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/dashboard" replace />} />

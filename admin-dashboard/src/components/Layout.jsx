@@ -21,7 +21,7 @@ const Layout = () => {
 
   const navItems = [
     { to: '/dashboard', icon: <LayoutDashboard size={20} />, label: 'Dashboard' },
-    { to: '/drivers', icon: <Truck size={20} />, label: 'Drivers' },
+    { to: '/drivers', icon: <Truck size={20} />, label: 'Test' },
     { to: '/users', icon: <Users size={20} />, label: 'Users' },
     { to: '/settings', icon: <Settings size={20} />, label: 'Settings' },
   ];

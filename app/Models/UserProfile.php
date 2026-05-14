@@ -5,8 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Admin extends Model
+class UserProfile extends Model
 {
+    protected $table = 'user_profiles';
+
     protected $fillable = [
         'user_id',
         'role',
@@ -26,4 +28,3 @@ class Admin extends Model
         return $this->belongsTo(User::class);
     }
 }
-

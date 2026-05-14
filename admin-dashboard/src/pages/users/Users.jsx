@@ -1,5 +1,7 @@
 import React from 'react';
 import { Search, UserPlus, Filter, MoreVertical } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import AddUser from './AddUser';
 
 const Users = () => {
   return (
@@ -10,8 +12,21 @@ const Users = () => {
           <p style={{ color: 'var(--text-muted)' }}>Manage your application customers and staff.</p>
         </div>
         <button className="login-btn" style={{ width: 'auto', padding: '10px 20px', gap: '8px' }}>
-          <UserPlus size={18} />
-          Add New User
+        <Link
+          to="/users/create"
+          className="login-btn"
+          style={{
+            width: 'auto',
+            padding: '10px 20px',
+            gap: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            textDecoration: 'none'
+          }}
+        >
+  <UserPlus size={18} />
+  Add New User
+</Link>
         </button>
       </header>
 
