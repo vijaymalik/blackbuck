@@ -14,21 +14,20 @@ class DriverProfileController extends ApiController
 
     public function show(Request $request): JsonResponse
     {
-        $user = $request->user();
+        $user = $request->user()->load('driverProfile');
 
         return $this->ok([
-            'driver_profile' => $this->driverProfileService->getProfile($user),
+            'driver' => $user,
         ]);
-    }
+  }
 
     public function update(UpdateDriverProfileRequest $request): JsonResponse
     {
         $user = $request->user();
-        $profile = $this->driverProfileService->updateProfile($user, $request->validated());
+        $this->driverProfileService->updateProfile($user, $request->validated());
 
         return $this->ok([
-            'driver_profile' => $profile,
-        ], 'Driver profile updated');
+            'driver' => $user->fresh('driverProfile'),
+        ], 'Profile updated successfully');
     }
 }
-

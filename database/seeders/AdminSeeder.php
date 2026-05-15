@@ -28,8 +28,17 @@ class AdminSeeder extends Seeder
             Role::firstOrCreate(['name' => $roleName, 'guard_name' => 'web']);
         }
 
-        // 2. Create Permissions (Optional - can be expanded)
-        $permissions = ['manage users', 'view dashboard', 'manage drivers'];
+        // 2. Create Permissions (Sidebar Menus and Actions)
+        $permissions = [
+            'view dashboard',
+            'view drivers',
+            'manage drivers',
+            'view users',
+            'manage users',
+            'view roles',
+            'manage roles',
+            'view settings'
+        ];
         foreach ($permissions as $permissionName) {
             Permission::firstOrCreate(['name' => $permissionName, 'guard_name' => 'web']);
         }

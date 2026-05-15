@@ -26,6 +26,7 @@ class User extends Authenticatable
         'phone',
         'password',
         'is_online',
+        'is_driver',
         'last_seen_at',
         'current_latitude',
         'current_longitude',
@@ -52,6 +53,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_online' => 'boolean',
+            'is_driver' => 'boolean',
             'last_seen_at' => 'datetime',
         ];
     }

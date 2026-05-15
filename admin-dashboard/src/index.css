@@ -12,6 +12,14 @@
   --font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
+[data-theme='light'] {
+  --bg-dark: #f8fafc;
+  --bg-sidebar: #ffffff;
+  --card-bg: rgba(255, 255, 255, 0.8);
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border: rgba(0, 0, 0, 0.1);
+}
 * {
   margin: 0;
   padding: 0;

@@ -2,7 +2,7 @@
 
 namespace App\Modules\Admin\Repositories;
 
-use App\Models\Admin;
+use App\Models\UserProfile;
 use App\Models\User;
 use App\Support\Repositories\BaseRepository;
 
@@ -12,16 +12,15 @@ class AdminRepository extends BaseRepository
     {
         return User::query()
             ->where('email', $email)
-            ->whereHas('admin', function ($query): void {
+            ->whereHas('profile', function ($query): void {
                 $query->where('is_active', true);
             })
-            ->with('admin')
+            ->with('profile')
             ->first();
     }
 
-    public function findAdminProfileByUserId(int $userId): ?Admin
+    public function findAdminProfileByUserId(int $userId): ?UserProfile
     {
-        return Admin::query()->where('user_id', $userId)->first();
+        return UserProfile::query()->where('user_id', $userId)->first();
     }
 }
-

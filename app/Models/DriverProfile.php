@@ -11,6 +11,7 @@ class DriverProfile extends Model
         'user_id',
         'truck_type',
         'truck_number',
+        'truck_capacity',
         'preferred_operating_area',
     ];
 

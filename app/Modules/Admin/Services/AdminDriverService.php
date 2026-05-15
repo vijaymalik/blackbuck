@@ -10,9 +10,9 @@ class AdminDriverService extends BaseService
 {
     public function __construct(private readonly AdminDriverRepository $driverRepository) {}
 
-    public function getPaginatedDrivers(int $perPage = 15): LengthAwarePaginator
+    public function getPaginatedDrivers(int $perPage = 15, ?string $capacity = null): LengthAwarePaginator
     {
-        return $this->driverRepository->paginateDrivers($perPage);
+        return $this->driverRepository->paginateDrivers($perPage, $capacity);
     }
 
     public function searchNearbyDrivers(array $filters): array
@@ -21,7 +21,8 @@ class AdminDriverService extends BaseService
             lat: (float) $filters['lat'],
             lng: (float) $filters['lng'],
             radiusMeters: (int) ($filters['radius_meters'] ?? 5000),
-            limit: (int) ($filters['limit'] ?? 50)
+            limit: (int) ($filters['limit'] ?? 50),
+            capacity: $filters['capacity'] ?? null
         );
     }
 }

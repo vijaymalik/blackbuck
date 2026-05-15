@@ -16,27 +16,34 @@ class DriverProfileService extends BaseService
 
         return [
             'name' => $user->name,
+            'email' => $user->email,
             'phone' => $user->phone,
             'truck_type' => $user->driverProfile?->truck_type,
             'truck_number' => $user->driverProfile?->truck_number,
-            'preferred_operating_area' => $user->driverProfile?->preferred_operating_area,
+            'truck_capacity' => $user->driverProfile?->truck_capacity,
         ];
     }
 
     public function updateProfile(User $user, array $payload): array
     {
-        $user->update([
-            'name' => $payload['name'],
-            'phone' => $payload['phone'],
-        ]);
+        $userData = [];
+        if (isset($payload['name'])) $userData['name'] = $payload['name'];
+        if (isset($payload['email'])) $userData['email'] = $payload['email'];
+        if (isset($payload['phone'])) $userData['phone'] = $payload['phone'];
 
-        $this->driverProfiles->updateOrCreateByUserId($user->id, [
-            'truck_type' => $payload['truck_type'],
-            'truck_number' => $payload['truck_number'],
-            'preferred_operating_area' => $payload['preferred_operating_area'],
-        ]);
+        if (!empty($userData)) {
+            $user->update($userData);
+        }
+
+        $profileData = [];
+        if (isset($payload['truck_type'])) $profileData['truck_type'] = $payload['truck_type'];
+        if (isset($payload['truck_number'])) $profileData['truck_number'] = $payload['truck_number'];
+        if (isset($payload['truck_capacity'])) $profileData['truck_capacity'] = $payload['truck_capacity'];
+
+        if (!empty($profileData)) {
+            $this->driverProfiles->updateOrCreateByUserId($user->id, $profileData);
+        }
 
         return $this->getProfile($user->refresh());
     }
 }
-

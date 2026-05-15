@@ -15,7 +15,8 @@ class AdminDriverController extends ApiController
     public function index(Request $request): JsonResponse
     {
         $drivers = $this->driverService->getPaginatedDrivers(
-            perPage: (int) $request->query('per_page', 15)
+            perPage: (int) $request->query('per_page', 15),
+            capacity: $request->query('capacity')
         );
 
         return $this->paginated($drivers, [

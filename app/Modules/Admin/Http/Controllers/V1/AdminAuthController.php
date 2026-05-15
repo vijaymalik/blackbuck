@@ -25,9 +25,12 @@ class AdminAuthController extends ApiController
 
     public function profile(Request $request): JsonResponse
     {
+        $user = $request->user()->loadMissing(['profile', 'roles']);
         return $this->ok([
-            'user' => $request->user()->loadMissing('admin'),
-            'admin' => $request->user()->admin,
+            'user' => $user,
+            'profile' => $user->profile,
+            'roles' => $user->getRoleNames(),
+            'permissions' => $user->getAllPermissions()->pluck('name')
         ]);
     }
 
@@ -36,6 +39,20 @@ class AdminAuthController extends ApiController
         $this->authService->logout($request);
 
         return $this->ok(null, 'Admin logged out');
+    }
+
+    public function changePassword(Request $request): JsonResponse
+    {
+        $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'new_password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $request->user()->update([
+            'password' => \Illuminate\Support\Facades\Hash::make($request->new_password)
+        ]);
+
+        return $this->ok(null, 'Password changed successfully');
     }
 }
 

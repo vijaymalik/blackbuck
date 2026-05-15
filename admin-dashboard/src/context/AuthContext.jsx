@@ -8,11 +8,32 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (token) {
-      // In a real app, verify token with API here
-      setUser(JSON.parse(localStorage.getItem('admin_user')));
-    }
-    setLoading(false);
+    const fetchProfile = async () => {
+      if (token) {
+        try {
+          // Temporarily use import statement dynamic or global fetch since api.js might not be imported yet
+          const res = await fetch('http://localhost:8002/api/v1/admin/profile', {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Accept': 'application/json'
+            }
+          });
+          const data = await res.json();
+          if (res.ok && data.data) {
+            const fullUser = { ...data.data.user, permissions: data.data.permissions, roles: data.data.roles };
+            setUser(fullUser);
+            localStorage.setItem('admin_user', JSON.stringify(fullUser));
+          } else {
+            // Invalid token
+            logout();
+          }
+        } catch (e) {
+          setUser(JSON.parse(localStorage.getItem('admin_user')));
+        }
+      }
+      setLoading(false);
+    };
+    fetchProfile();
   }, [token]);
 
   const login = (userData, userToken) => {

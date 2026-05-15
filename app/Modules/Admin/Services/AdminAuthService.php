@@ -23,7 +23,7 @@ class AdminAuthService extends BaseService
         $tokenName = sprintf('admin:%s', $deviceName);
 
         return [
-            'admin' => $user->admin,
+            'admin' => $user->profile,
             'user' => $user,
             'token' => $user->createToken($tokenName, ['admin'])->plainTextToken,
         ];
@@ -34,4 +34,3 @@ class AdminAuthService extends BaseService
         $request->user()?->currentAccessToken()?->delete();
     }
 }
-

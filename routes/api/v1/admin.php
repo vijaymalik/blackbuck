@@ -14,7 +14,9 @@ Route::prefix('admin')
         Route::middleware(['auth:sanctum', 'force.json'])->group(function (): void {
             Route::post('logout', [AdminAuthController::class, 'logout']);
             Route::get('profile', [AdminAuthController::class, 'profile']);
+            Route::post('change-password', [AdminAuthController::class, 'changePassword']);
             Route::get('health', [AdminController::class, 'health']);
+            Route::get('dashboard-stats', [AdminController::class, 'dashboardStats']);
 
             Route::prefix('drivers')->name('drivers.')->group(function (): void {
                 Route::get('/', [AdminDriverController::class, 'index']);
@@ -24,6 +26,15 @@ Route::prefix('admin')
             Route::prefix('users')->name('users.')->group(function (): void {
                 Route::get('/', [AdminUserController::class, 'index']);
                 Route::post('/', [AdminUserController::class, 'store']);
+                Route::put('/{user}', [AdminUserController::class, 'update']);
+                Route::delete('/{user}', [AdminUserController::class, 'destroy']);
+            });
+
+            Route::prefix('roles')->name('roles.')->group(function (): void {
+                Route::get('/', [\App\Modules\Admin\Http\Controllers\V1\AdminRoleController::class, 'index']);
+                Route::post('/', [\App\Modules\Admin\Http\Controllers\V1\AdminRoleController::class, 'store']);
+                Route::put('/{role}', [\App\Modules\Admin\Http\Controllers\V1\AdminRoleController::class, 'update']);
+                Route::delete('/{role}', [\App\Modules\Admin\Http\Controllers\V1\AdminRoleController::class, 'destroy']);
             });
         });
     });
