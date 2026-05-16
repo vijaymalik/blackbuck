@@ -15,6 +15,7 @@ class DriverLocation extends Model
         'heading_degrees',
         'accuracy_meters',
         'recorded_at',
+        'coordinates',
     ];
 
     protected function casts(): array

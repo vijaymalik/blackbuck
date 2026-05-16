@@ -36,6 +36,7 @@ class DriverLocationController extends ApiController
             [
                 'latitude' => $request->latitude,
                 'longitude' => $request->longitude,
+                'coordinates' => \Illuminate\Support\Facades\DB::raw("ST_SetSRID(ST_MakePoint({$request->longitude}, {$request->latitude}), 4326)"),
                 'recorded_at' => now(),
             ]
         );
@@ -47,6 +48,8 @@ class DriverLocationController extends ApiController
     {
         $validator = Validator::make($request->all(), [
             'is_online' => 'required|boolean',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
         ]);
 
         if ($validator->fails()) {
@@ -55,6 +58,24 @@ class DriverLocationController extends ApiController
 
         $user = $request->user();
         $user->update(['is_online' => $request->is_online]);
+
+        if ($request->has(['latitude', 'longitude'])) {
+            $user->update([
+                'current_latitude' => $request->latitude,
+                'current_longitude' => $request->longitude,
+                'last_seen_at' => now(),
+            ]);
+
+            $user->driverLocation()->updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'latitude' => $request->latitude,
+                    'longitude' => $request->longitude,
+                    'coordinates' => \Illuminate\Support\Facades\DB::raw("ST_SetSRID(ST_MakePoint({$request->longitude}, {$request->latitude}), 4326)"),
+                    'recorded_at' => now(),
+                ]
+            );
+        }
 
         return $this->ok(['is_online' => $user->is_online], 'Status updated');
     }

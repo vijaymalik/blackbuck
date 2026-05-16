@@ -39,6 +39,7 @@ class DriverSeeder extends Seeder
                     'password' => Hash::make('password'),
                     'phone' => '987654321' . $index,
                     'is_online' => $data['online'],
+                    'is_driver' => true,
                     'last_seen_at' => now(),
                     'email_verified_at' => now(),
                 ]
@@ -50,7 +51,6 @@ class DriverSeeder extends Seeder
             UserProfile::updateOrCreate(
                 ['user_id' => $user->id],
                 [
-                    'role' => 'driver',
                     'is_active' => true,
                     'created_by' => 1,
                 ]
@@ -75,6 +75,7 @@ class DriverSeeder extends Seeder
                 [
                     'latitude' => $lat,
                     'longitude' => $lng,
+                    'coordinates' => \Illuminate\Support\Facades\DB::raw("ST_SetSRID(ST_MakePoint({$lng}, {$lat}), 4326)"),
                     'speed_kmh' => $data['online'] ? mt_rand(20, 60) : 0,
                     'heading_degrees' => mt_rand(0, 360),
                     'recorded_at' => now(),

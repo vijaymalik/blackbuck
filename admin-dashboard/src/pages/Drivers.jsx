@@ -22,7 +22,7 @@ L.Icon.Default.mergeOptions({
 });
 
 const searchCenterIcon = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+  iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
   iconSize: [25, 41],
   iconAnchor: [12, 41],
@@ -127,9 +127,9 @@ const Drivers = () => {
       const response = await api.get(`/drivers?page=${page}&per_page=${perPage}&status=${statusFilter}&capacity=${capacityFilter}`);
       setDrivers(response.data.data.drivers);
       setPagination({
-        current_page: response.data.data.meta?.current_page || 1,
-        last_page: response.data.data.meta?.last_page || 1,
-        total: response.data.data.meta?.total || 0,
+        current_page: response.data.meta?.pagination?.current_page || 1,
+        last_page: response.data.meta?.pagination?.last_page || 1,
+        total: response.data.meta?.pagination?.total || 0,
         per_page: perPage
       });
     } catch (error) {
@@ -179,7 +179,7 @@ const Drivers = () => {
       setIsLocating(true);
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          const newLoc = [position.coords.latitude, position.coords.longitude];
+          const newLoc = [parseFloat(position.coords.latitude), parseFloat(position.coords.longitude)];
           setSearchCenter(newLoc);
           setMapFocus(newLoc);
           setIsLocating(false);
@@ -187,9 +187,15 @@ const Drivers = () => {
         (error) => {
           console.error("Error detecting location:", error);
           setIsLocating(false);
-          alert("Could not detect your location. Please ensure location services are enabled.");
+          if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
+            alert("Browser location requires HTTPS. Please search for your location manually in the search box.");
+          } else {
+            alert("Could not detect your location. Please ensure location services are enabled.");
+          }
         }
       );
+    } else {
+      alert("Your browser does not support geolocation.");
     }
   };
 
@@ -203,11 +209,16 @@ const Drivers = () => {
 
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371;
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const l1 = parseFloat(lat1);
+    const n1 = parseFloat(lon1);
+    const l2 = parseFloat(lat2);
+    const n2 = parseFloat(lon2);
+    
+    const dLat = (l2 - l1) * Math.PI / 180;
+    const dLon = (n2 - n1) * Math.PI / 180;
     const a = 
       Math.sin(dLat/2) * Math.sin(dLat/2) +
-      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+      Math.cos(l1 * Math.PI / 180) * Math.cos(l2 * Math.PI / 180) * 
       Math.sin(dLon/2) * Math.sin(dLon/2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     return R * c;
@@ -247,7 +258,10 @@ const Drivers = () => {
   const onDriverClick = async (driver) => {
     if (driver.driver_location) {
       setSelectedDriver(driver);
-      const driverPos = [driver.driver_location.latitude, driver.driver_location.longitude];
+      const driverPos = [
+        parseFloat(driver.driver_location.latitude), 
+        parseFloat(driver.driver_location.longitude)
+      ];
       setMapFocus(driverPos);
       setDriverAddress('Fetching address...');
       try {
@@ -314,14 +328,14 @@ const Drivers = () => {
   };
 
   return (
-    <div style={{ height: 'calc(100vh - 64px)', display: 'flex', flexDirection: 'column' }}>
+    <div className="drivers-container" style={{ display: 'flex', flexDirection: 'column' }}>
       {/* PROFESSIONAL DASHBOARD HEADER */}
-      <div style={{ padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div className="page-header" style={{ padding: '16px 24px' }}>
          <div>
             <h1 style={{ margin: 0, fontSize: '1.75rem', fontWeight: '700', letterSpacing: '-0.02em' }}>Fleet Monitoring</h1>
             <p style={{ margin: '4px 0 0 0', color: 'var(--text-muted)', fontSize: '0.9rem' }}>Real-time driver tracking and management</p>
          </div>
-         <div style={{ display: 'flex', gap: '16px' }}>
+         <div className="header-actions" style={{ display: 'flex', gap: '16px' }}>
             <div className="glass" style={{ padding: '4px', borderRadius: '14px', display: 'flex', background: 'rgba(255,255,255,0.05)' }}>
                <button onClick={() => setViewMode('map')} style={{ ...viewToggleStyle, ...(viewMode === 'map' ? activeToggleStyle : {}) }}>
                   <MapIcon size={18} /> Map View
@@ -352,9 +366,9 @@ const Drivers = () => {
       </div>
 
       {viewMode === 'map' ? (
-        <div style={{ flex: 1, display: 'flex', padding: '0 12px 12px', gap: '12px', minHeight: 0 }}>
+        <div className="drivers-page" style={{ flex: 1, padding: '0 12px 12px', gap: '12px', minHeight: 0 }}>
           {/* MAP SIDEBAR */}
-          <aside className="glass" style={{ width: '400px', borderRadius: '16px', overflow: 'hidden', display: 'flex', flexDirection: 'column', border: '1px solid rgba(255,255,255,0.05)' }}>
+          <aside className="glass page-sidebar" style={{ borderRadius: '16px', overflow: 'hidden', display: 'flex', flexDirection: 'column', border: '1px solid rgba(255,255,255,0.05)' }}>
              <div style={{ padding: '24px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
                    <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: '600' }}>Search Range</h3>
@@ -403,7 +417,7 @@ const Drivers = () => {
           </aside>
 
           {/* INTERACTIVE MAP CONTAINER */}
-          <div style={{ flex: 1, position: 'relative', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)' }}>
+          <div className="map-view" style={{ position: 'relative', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)' }}>
              <div style={{ position: 'absolute', top: '20px', left: '20px', zIndex: 1000 }}>
                 <div className="glass" style={{ ...searchBoxStyle, width: '300px', background: 'var(--card-bg)' }}>
                    <MapPin size={16} color="var(--primary)" />
@@ -526,12 +540,12 @@ const Drivers = () => {
                      <span>Showing results near <strong style={{ color: 'var(--text-main)' }}>{selectedAddress}</strong> ({radius / 1000} km range)</span>
                   </div>
                </div>
-               <div style={{ padding: '20px', display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', background: 'var(--border)' }}>
-                 <div className="glass" style={{ ...searchBoxStyle, maxWidth: '300px' }}>
+               <div className="table-filter-bar" style={{ padding: '20px', display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', background: 'var(--border)' }}>
+                 <div className="glass" style={{ ...searchBoxStyle, width: '100%', maxWidth: '300px' }}>
                     <Search size={16} color="rgba(255,255,255,0.4)" />
                     <input type="text" placeholder="Filter list..." value={driverSearchQuery} onChange={e => setDriverSearchQuery(e.target.value)} style={searchInputStyle} />
                  </div>
-                 <div style={{ marginLeft: 'auto', display: 'flex', gap: '12px' }}>
+                 <div className="filter-actions" style={{ marginLeft: 'auto', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                     <select value={capacityFilter} onChange={e => setCapacityFilter(e.target.value)} style={selectStyle}>
                        <option value="" style={{ background: 'var(--bg-sidebar)' }}>All Capacities</option>
                        <option value="5" style={{ background: 'var(--bg-sidebar)' }}>5+ Tons</option>
@@ -564,18 +578,18 @@ const Drivers = () => {
                         className="btn-hover-danger"
                      >
                         <RefreshCw size={14} /> 
-                        <span>Reset Filters</span>
+                        <span>Reset</span>
                      </button>
                     <select value={pagination.per_page} onChange={(e) => setPagination(p => ({ ...p, per_page: parseInt(e.target.value), current_page: 1 }))} style={selectStyle}>
-                       <option value="10" style={{ background: 'var(--bg-sidebar)' }}>10 / page</option>
-                       <option value="25" style={{ background: 'var(--bg-sidebar)' }}>25 / page</option>
-                       <option value="50" style={{ background: 'var(--bg-sidebar)' }}>50 / page</option>
+                       <option value="10" style={{ background: 'var(--bg-sidebar)' }}>10 / pg</option>
+                       <option value="25" style={{ background: 'var(--bg-sidebar)' }}>25 / pg</option>
+                       <option value="50" style={{ background: 'var(--bg-sidebar)' }}>50 / pg</option>
                     </select>
                  </div>
               </div>
               
-              <div style={{ overflowX: 'auto', flex: 1 }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '1000px' }}>
+              <div className="table-container" style={{ overflowX: 'auto', flex: 1 }}>
+                <table className="drivers-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
                    <thead>
                       <tr style={{ textAlign: 'left', color: 'var(--text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                          <th style={{ padding: '16px 24px' }}>Driver Info</th>

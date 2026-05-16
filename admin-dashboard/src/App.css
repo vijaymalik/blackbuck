@@ -554,3 +554,218 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #475569;
 }
+/* --- MOBILE RESPONSIVENESS --- */
+@media (max-width: 1024px) {
+  .main-sidebar {
+    width: 80px;
+  }
+  .nav-link span, .user-details, .logout-btn span, .sidebar-header h1 {
+    display: none;
+  }
+  .nav-link {
+    justify-content: center;
+    padding: 12px;
+  }
+  .sidebar-footer {
+    padding: 12px;
+  }
+  .user-info {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  #root {
+    flex-direction: column;
+  }
+  
+  .app-layout {
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+  }
+  
+  .main-sidebar {
+    width: 100% !important;
+    height: 75px !important;
+    flex-direction: row !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    padding: 0 !important;
+    border-right: none !important;
+    border-top: 2px solid var(--primary) !important;
+    background: #1e293b !important;
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.5) !important;
+    z-index: 10000 !important;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  .sidebar-header {
+    display: none !important;
+  }
+  
+  .sidebar-nav {
+    flex-direction: row !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    display: flex !important;
+  }
+  
+  .nav-link {
+    height: 100% !important;
+    width: auto !important;
+    min-width: 60px !important;
+    border-radius: 0 !important;
+    padding: 0 10px !important;
+    justify-content: center !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+    font-size: 0.7rem !important;
+  }
+
+  .nav-link span {
+    display: block !important;
+    font-size: 0.65rem;
+  }
+  
+  .sidebar-footer {
+    display: none !important;
+  }
+  
+  .main-content {
+    margin-bottom: 70px !important;
+    height: calc(100vh - 70px) !important;
+    height: calc(100dvh - 70px) !important;
+    padding-bottom: 20px !important;
+  }
+  
+  /* Drivers Page Mobile */
+  .drivers-page {
+    flex-direction: column !important;
+    height: auto !important;
+    gap: 20px !important;
+  }
+  
+  .page-sidebar {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 300px !important;
+    order: 2 !important;
+    overflow: visible !important;
+  }
+  
+  .map-view {
+    height: 50vh !important;
+    min-height: 400px !important;
+    flex: none !important;
+    order: 1 !important;
+  }
+  
+  .nearby-search-overlay {
+    top: 10px !important;
+    left: 10px !important;
+    right: 10px !important;
+  }
+  
+  .search-bar {
+    max-width: 100%;
+    padding: 6px 12px;
+  }
+  
+  .radius-control {
+    display: none; /* Hide radius on mobile search bar to save space */
+  }
+  
+  .map-controls {
+    bottom: 10px;
+    right: 10px;
+  }
+  
+  .control-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* Table View Mobile */
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  .drivers-table {
+    min-width: 600px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 24px;
+    border-radius: 0;
+    height: 100vh;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32px 32px 24px;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+  }
+  
+  .header-actions {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  
+  .header-actions button {
+    flex: 1;
+    padding: 0 10px !important;
+    font-size: 0.85rem;
+  }
+}
+
+.drivers-container {
+  height: calc(100vh - 64px);
+}
+
+@media (max-width: 768px) {
+  body {
+    overflow-y: auto !important;
+  }
+  
+  .app-layout {
+    height: auto !important;
+    min-height: 100vh;
+  }
+  
+  .drivers-container {
+    height: auto !important;
+    min-height: 100vh;
+    padding-bottom: 100px; /* Space for bottom bar */
+  }
+
+  .main-content {
+    height: auto !important;
+    overflow: visible !important;
+  }
+}
