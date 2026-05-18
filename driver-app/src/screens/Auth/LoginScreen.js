@@ -133,26 +133,30 @@ const styles = StyleSheet.create({
   logoContainer: {
     width: 80,
     height: 80,
-    borderRadius: 20,
+    borderRadius: 24,
     backgroundColor: COLORS.primary,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: SPACING.md,
     shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.6,
     shadowRadius: 20,
     elevation: 10,
+    borderWidth: 2,
+    borderColor: 'rgba(255, 255, 255, 0.2)'
   },
   title: {
     fontSize: 28,
-    fontWeight: '800',
+    fontWeight: '900',
     color: COLORS.text,
     marginBottom: 8,
+    letterSpacing: -0.5
   },
   subtitle: {
     fontSize: 16,
     color: COLORS.textMuted,
+    fontWeight: '500'
   },
   form: {
     width: '100%',
@@ -162,19 +166,19 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '700',
     color: COLORS.text,
     marginBottom: 8,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.surface,
-    borderRadius: SIZES.radius,
+    backgroundColor: 'rgba(30, 41, 59, 0.4)',
+    borderRadius: SIZES.radius + 4,
     paddingHorizontal: SPACING.md,
     height: 56,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: 'rgba(255, 255, 255, 0.05)',
   },
   input: {
     flex: 1,
@@ -185,24 +189,29 @@ const styles = StyleSheet.create({
   loginButton: {
     backgroundColor: COLORS.primary,
     height: 56,
-    borderRadius: SIZES.radius,
+    borderRadius: SIZES.radius + 4,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: SPACING.md,
     shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.4,
+    shadowRadius: 15,
+    elevation: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)'
   },
   loginButtonDisabled: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: 'rgba(30, 41, 59, 0.2)',
     opacity: 0.5,
+    shadowOpacity: 0,
+    elevation: 0
   },
   loginButtonText: {
     color: COLORS.white,
     fontSize: 18,
-    fontWeight: '700',
+    fontWeight: '800',
+    letterSpacing: 0.5
   },
   footer: {
     flexDirection: 'row',
@@ -216,7 +225,7 @@ const styles = StyleSheet.create({
   link: {
     color: COLORS.primary,
     fontSize: 15,
-    fontWeight: '700',
+    fontWeight: '800',
   },
 });
 

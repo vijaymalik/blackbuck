@@ -78,4 +78,23 @@ class DriverAuthController extends ApiController
 
         return $this->ok(null, 'Logged out successfully');
     }
+
+    public function saveFcmToken(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'fcm_token' => 'required|string',
+            'device_type' => 'nullable|string|in:android,ios',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->fail($validator->errors()->first(), 422);
+        }
+
+        $request->user()->update([
+            'fcm_token' => $request->fcm_token,
+            'device_type' => $request->device_type,
+        ]);
+
+        return $this->ok(null, 'FCM token and device type saved successfully.');
+    }
 }

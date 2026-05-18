@@ -17,6 +17,7 @@ Route::prefix('driver')
     ->group(function (): void {
         Route::get('me', [DriverAuthController::class, 'me']);
         Route::post('logout', [DriverAuthController::class, 'logout']);
+        Route::post('save-fcm-token', [DriverAuthController::class, 'saveFcmToken']);
         
         Route::get('profile', [DriverProfileController::class, 'show']);
         Route::put('profile', [DriverProfileController::class, 'update']);
@@ -24,6 +25,11 @@ Route::prefix('driver')
         // Tracking Routes
         Route::post('location', [\App\Modules\Drivers\Http\Controllers\V1\DriverLocationController::class, 'update']);
         Route::post('toggle-status', [\App\Modules\Drivers\Http\Controllers\V1\DriverLocationController::class, 'toggleStatus']);
+        
+        // Enquiry Bidding & Assignment Routes
+        Route::post('enquiries/{enquiry}/respond', [\App\Modules\Drivers\Http\Controllers\V1\DriverLocationController::class, 'respondToEnquiry']);
+        Route::get('enquiries/accepted', [\App\Modules\Drivers\Http\Controllers\V1\DriverLocationController::class, 'getAcceptedEnquiries']);
+        Route::post('enquiries/{enquiry}/responses/status', [\App\Modules\Drivers\Http\Controllers\V1\DriverLocationController::class, 'updateResponseStatus']);
         
         // Nearby drivers for the app (if needed)
         Route::get('nearby', [DriversController::class, 'nearby']);

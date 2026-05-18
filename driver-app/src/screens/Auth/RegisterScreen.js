@@ -127,26 +127,27 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   scrollContent: { flexGrow: 1, paddingHorizontal: SPACING.lg, paddingBottom: 40, paddingTop: 60 },
   header: { marginBottom: SPACING.xl },
-  backBtn: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center', marginLeft: -10, marginBottom: 10 },
-  progressContainer: { height: 4, backgroundColor: COLORS.surface, borderRadius: 2, marginBottom: 20 },
-  progressBar: { height: '100%', backgroundColor: COLORS.primary, borderRadius: 2 },
-  title: { fontSize: 28, fontWeight: '800', color: COLORS.text, marginBottom: 8 },
-  subtitle: { fontSize: 16, color: COLORS.textMuted },
+  backBtn: { width: 44, height: 44, borderRadius: 14, backgroundColor: 'rgba(30, 41, 59, 0.4)', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.05)', marginBottom: 15 },
+  progressContainer: { height: 6, backgroundColor: 'rgba(255, 255, 255, 0.05)', borderRadius: 3, marginBottom: 20, overflow: 'hidden' },
+  progressBar: { height: '100%', backgroundColor: COLORS.primary, borderRadius: 3, shadowColor: COLORS.primary, shadowOpacity: 0.5, shadowRadius: 5 },
+  title: { fontSize: 28, fontWeight: '900', color: COLORS.text, marginBottom: 8, letterSpacing: -0.5 },
+  subtitle: { fontSize: 16, color: COLORS.textMuted, fontWeight: '500' },
   form: { marginTop: 20 },
   inputGroup: { marginBottom: SPACING.lg },
-  label: { fontSize: 14, fontWeight: '600', color: COLORS.text, marginBottom: 8 },
+  label: { fontSize: 14, fontWeight: '700', color: COLORS.text, marginBottom: 8 },
   inputContainer: { 
-    flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.surface, 
-    borderRadius: SIZES.radius, paddingHorizontal: SPACING.md, height: 56, 
-    borderWidth: 1, borderColor: COLORS.border 
+    flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgba(30, 41, 59, 0.4)', 
+    borderRadius: SIZES.radius + 4, paddingHorizontal: SPACING.md, height: 56, 
+    borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.05)' 
   },
   input: { flex: 1, color: COLORS.text, fontSize: 16, marginLeft: 12 },
   nextButton: { 
-    backgroundColor: COLORS.primary, height: 56, borderRadius: SIZES.radius, 
+    backgroundColor: COLORS.primary, height: 56, borderRadius: SIZES.radius + 4, 
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 20,
-    shadowColor: COLORS.primary, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 4
+    shadowColor: COLORS.primary, shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.4, shadowRadius: 15, elevation: 8,
+    borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.1)'
   },
-  nextButtonText: { color: COLORS.white, fontSize: 18, fontWeight: '700', marginRight: 8 }
+  nextButtonText: { color: COLORS.white, fontSize: 18, fontWeight: '800', marginRight: 8 }
 });
 
 export default RegisterScreen;

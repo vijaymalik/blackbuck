@@ -22,11 +22,29 @@ class AdminController extends ApiController
         $totalUsers = \App\Models\User::count();
         $totalRoles = \Spatie\Permission\Models\Role::count();
 
+        $totalEnquiries = \App\Models\Enquiry::count();
+
+        $assignedEnquiries = \App\Models\Enquiry::whereHas('responses', function ($query) {
+            $query->where('status', 'accepted');
+        })->count();
+
+        $dispatchedEnquiries = \App\Models\Enquiry::whereHas('responses', function ($query) {
+            $query->where('status', 'dispatched');
+        })->count();
+
+        $completedEnquiries = \App\Models\Enquiry::whereHas('responses', function ($query) {
+            $query->where('status', 'completed');
+        })->count();
+
         return $this->ok([
             'total_drivers' => $totalDrivers,
             'active_drivers' => $activeDrivers,
             'total_users' => $totalUsers,
             'total_roles' => $totalRoles,
+            'total_enquiries' => $totalEnquiries,
+            'assigned_enquiries' => $assignedEnquiries,
+            'dispatched_enquiries' => $dispatchedEnquiries,
+            'completed_enquiries' => $completedEnquiries,
             'system_health' => '99.9%'
         ], 'Dashboard stats fetched successfully');
     }

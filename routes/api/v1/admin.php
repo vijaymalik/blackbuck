@@ -23,6 +23,19 @@ Route::prefix('admin')
                 Route::get('nearby', [AdminDriverController::class, 'nearby']);
             });
 
+            Route::prefix('enquiries')->name('enquiries.')->group(function (): void {
+                Route::get('/', [\App\Modules\Admin\Http\Controllers\V1\AdminEnquiryController::class, 'index']);
+                Route::post('/', [\App\Modules\Admin\Http\Controllers\V1\AdminEnquiryController::class, 'store']);
+                Route::get('nearby-drivers-count', [\App\Modules\Admin\Http\Controllers\V1\AdminEnquiryController::class, 'getNearbyDriversCount']);
+                Route::post('/{enquiry}/toggle-status', [\App\Modules\Admin\Http\Controllers\V1\AdminEnquiryController::class, 'toggleStatus']);
+                
+                // Bid & Assignment Management
+                Route::get('/{enquiry}/responses', [\App\Modules\Admin\Http\Controllers\V1\AdminEnquiryController::class, 'getEnquiryResponses']);
+                Route::post('/{enquiry}/responses/{response}/accept', [\App\Modules\Admin\Http\Controllers\V1\AdminEnquiryController::class, 'acceptEnquiryResponse']);
+                Route::post('/{enquiry}/reopen', [\App\Modules\Admin\Http\Controllers\V1\AdminEnquiryController::class, 'reopenEnquiry']);
+                Route::post('/{enquiry}/status', [\App\Modules\Admin\Http\Controllers\V1\AdminEnquiryController::class, 'updateResponseStatus']);
+            });
+
             Route::prefix('users')->name('users.')->group(function (): void {
                 Route::get('/', [AdminUserController::class, 'index']);
                 Route::post('/', [AdminUserController::class, 'store']);
@@ -35,6 +48,13 @@ Route::prefix('admin')
                 Route::post('/', [\App\Modules\Admin\Http\Controllers\V1\AdminRoleController::class, 'store']);
                 Route::put('/{role}', [\App\Modules\Admin\Http\Controllers\V1\AdminRoleController::class, 'update']);
                 Route::delete('/{role}', [\App\Modules\Admin\Http\Controllers\V1\AdminRoleController::class, 'destroy']);
+            });
+
+            Route::prefix('notifications')->name('notifications.')->group(function (): void {
+                Route::get('/', [\App\Modules\Admin\Http\Controllers\V1\AdminNotificationController::class, 'index']);
+                Route::post('/read-all', [\App\Modules\Admin\Http\Controllers\V1\AdminNotificationController::class, 'markAllRead']);
+                Route::post('/{notification}/read', [\App\Modules\Admin\Http\Controllers\V1\AdminNotificationController::class, 'markRead']);
+                Route::delete('/clear-all', [\App\Modules\Admin\Http\Controllers\V1\AdminNotificationController::class, 'clearAll']);
             });
         });
     });

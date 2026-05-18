@@ -11,8 +11,8 @@ export const AuthProvider = ({ children }) => {
     const fetchProfile = async () => {
       if (token) {
         try {
-          // Temporarily use import statement dynamic or global fetch since api.js might not be imported yet
-          const res = await fetch('http://localhost:8002/api/v1/admin/profile', {
+          const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8002/api/v1/admin';
+          const res = await fetch(`${apiBase}/profile`, {
             headers: {
               'Authorization': `Bearer ${token}`,
               'Accept': 'application/json'

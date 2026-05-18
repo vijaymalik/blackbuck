@@ -18,7 +18,7 @@ const ProfileScreen = ({ navigation }) => {
     truck_type: userData?.driver_profile?.truck_type || '',
     truck_number: userData?.driver_profile?.truck_number || '',
     truck_capacity: userData?.driver_profile?.truck_capacity?.toString() || '',
-    preferred_area: userData?.driver_profile?.preferred_area || '',
+    preferred_operating_area: userData?.driver_profile?.preferred_operating_area || '',
   });
 
   const handleUpdate = async () => {
@@ -89,7 +89,7 @@ const ProfileScreen = ({ navigation }) => {
           {renderInput('Truck Type', <Truck size={20} color={COLORS.primary} />, formData.truck_type, 'truck_type')}
           {renderInput('Plate Number', <Truck size={20} color={COLORS.primary} />, formData.truck_number, 'truck_number')}
           {renderInput('Capacity (Tons)', <Truck size={20} color={COLORS.primary} />, formData.truck_capacity, 'truck_capacity', 'numeric')}
-          {renderInput('Preferred Area', <MapPin size={20} color={COLORS.primary} />, formData.preferred_area, 'preferred_area')}
+          {renderInput('Preferred Area', <MapPin size={20} color={COLORS.primary} />, formData.preferred_operating_area, 'preferred_operating_area')}
 
           <TouchableOpacity 
             style={[styles.saveBtn, loading && styles.saveBtnDisabled]} 

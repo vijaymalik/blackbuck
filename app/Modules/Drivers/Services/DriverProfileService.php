@@ -21,6 +21,7 @@ class DriverProfileService extends BaseService
             'truck_type' => $user->driverProfile?->truck_type,
             'truck_number' => $user->driverProfile?->truck_number,
             'truck_capacity' => $user->driverProfile?->truck_capacity,
+            'preferred_operating_area' => $user->driverProfile?->preferred_operating_area,
         ];
     }
 
@@ -39,6 +40,7 @@ class DriverProfileService extends BaseService
         if (isset($payload['truck_type'])) $profileData['truck_type'] = $payload['truck_type'];
         if (isset($payload['truck_number'])) $profileData['truck_number'] = $payload['truck_number'];
         if (isset($payload['truck_capacity'])) $profileData['truck_capacity'] = $payload['truck_capacity'];
+        if (isset($payload['preferred_operating_area'])) $profileData['preferred_operating_area'] = $payload['preferred_operating_area'];
 
         if (!empty($profileData)) {
             $this->driverProfiles->updateOrCreateByUserId($user->id, $profileData);

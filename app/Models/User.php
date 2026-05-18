@@ -30,6 +30,8 @@ class User extends Authenticatable
         'last_seen_at',
         'current_latitude',
         'current_longitude',
+        'fcm_token',
+        'device_type',
     ];
 
     /**

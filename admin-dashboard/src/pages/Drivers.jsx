@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   Search, MapPin, Navigation, Signal, Loader2, Info, Map as MapIcon, 
   List, Eye, MoreVertical, Plus, Edit, Trash2, X, ChevronLeft, ChevronRight, 
-  Filter, Clock, Truck, LocateFixed, Layers, RefreshCw 
+  Filter, Clock, Truck, LocateFixed, Layers, RefreshCw, Phone 
 } from 'lucide-react';
 import { 
   MapContainer, TileLayer, Marker, Popup, Circle, useMap, useMapEvents, 
@@ -336,7 +336,7 @@ const Drivers = () => {
             <p style={{ margin: '4px 0 0 0', color: 'var(--text-muted)', fontSize: '0.9rem' }}>Real-time driver tracking and management</p>
          </div>
          <div className="header-actions" style={{ display: 'flex', gap: '16px' }}>
-            <div className="glass" style={{ padding: '4px', borderRadius: '14px', display: 'flex', background: 'rgba(255,255,255,0.05)' }}>
+            <div className="glass" style={{ padding: '4px', borderRadius: '14px', display: 'flex' }}>
                <button onClick={() => setViewMode('map')} style={{ ...viewToggleStyle, ...(viewMode === 'map' ? activeToggleStyle : {}) }}>
                   <MapIcon size={18} /> Map View
                </button>
@@ -418,26 +418,26 @@ const Drivers = () => {
 
           {/* INTERACTIVE MAP CONTAINER */}
           <div className="map-view" style={{ position: 'relative', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)' }}>
-             <div style={{ position: 'absolute', top: '20px', left: '20px', zIndex: 1000 }}>
-                <div className="glass" style={{ ...searchBoxStyle, width: '300px', background: 'var(--card-bg)' }}>
+             <div style={{ position: 'absolute', top: '20px', left: '20px', right: '70px', zIndex: 1000, maxWidth: '360px' }}>
+                <div className="glass" style={{ ...searchBoxStyle, width: '100%', background: 'var(--card-bg)' }}>
                    <MapPin size={16} color="var(--primary)" />
                    <input type="text" placeholder="Search Place..." value={locationSearchQuery} onChange={handleLocationInputChange} onKeyDown={handleLocationSearch} style={searchInputStyle} />
                    {isLocating && <Loader2 className="spin" size={16} color="var(--primary)" />}
                 </div>
                 {showSuggestions && locationSuggestions.length > 0 && (
-                  <div className="glass" style={{ width: '300px', background: 'var(--card-bg)', marginTop: '8px', borderRadius: '12px', border: '1px solid var(--border)', overflow: 'hidden', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)' }}>
-                    {locationSuggestions.map((place, idx) => (
-                      <div 
-                        key={idx} 
-                        onClick={() => selectSuggestion(place)}
-                        style={{ padding: '12px 16px', cursor: 'pointer', borderBottom: idx !== locationSuggestions.length - 1 ? '1px solid var(--border)' : 'none', fontSize: '0.85rem', color: 'var(--text-main)', display: 'flex', alignItems: 'flex-start', gap: '8px' }}
-                        className="table-row-hover"
-                      >
-                        <MapPin size={14} color="var(--text-muted)" style={{ marginTop: '2px', flexShrink: 0 }} />
-                        <span>{place.display_name}</span>
-                      </div>
-                    ))}
-                  </div>
+                   <div className="glass" style={{ width: '100%', background: 'var(--card-bg)', marginTop: '8px', borderRadius: '12px', border: '1px solid var(--border)', overflow: 'hidden', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)' }}>
+                     {locationSuggestions.map((place, idx) => (
+                       <div 
+                         key={idx} 
+                         onClick={() => selectSuggestion(place)}
+                         style={{ padding: '12px 16px', cursor: 'pointer', borderBottom: idx !== locationSuggestions.length - 1 ? '1px solid var(--border)' : 'none', fontSize: '0.85rem', color: 'var(--text-main)', display: 'flex', alignItems: 'flex-start', gap: '8px' }}
+                         className="table-row-hover"
+                       >
+                         <MapPin size={14} color="var(--text-muted)" style={{ marginTop: '2px', flexShrink: 0 }} />
+                         <span>{place.display_name}</span>
+                       </div>
+                     ))}
+                   </div>
                 )}
              </div>
 
@@ -511,6 +511,25 @@ const Drivers = () => {
                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                               <Truck size={14} />
                               <span>{d.driver_profile?.truck_type} ({d.driver_profile?.truck_number})</span>
+                           </div>
+                           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
+                              <Phone size={14} color="var(--primary)" />
+                              <span style={{ color: 'var(--text-main)', fontWeight: '600' }}>{d.phone || 'N/A'}</span>
+                           </div>
+                           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
+                              <span style={{ 
+                                 fontSize: '0.75rem', 
+                                 color: d.driver_location.speed_kmh > 0 ? '#10b981' : 'var(--text-muted)', 
+                                 background: d.driver_location.speed_kmh > 0 ? 'rgba(16, 185, 129, 0.1)' : 'var(--border)', 
+                                 padding: '3px 8px', 
+                                 borderRadius: '6px', 
+                                 fontWeight: '700',
+                                 display: 'inline-flex',
+                                 alignItems: 'center',
+                                 gap: '4px'
+                              }}>
+                                 {d.driver_location.speed_kmh > 0 ? `⚡ Moving: ${d.driver_location.speed_kmh} km/h` : '⏸️ Idle'}
+                              </span>
                            </div>
                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', marginTop: '4px', borderTop: '1px solid var(--border)', paddingTop: '6px' }}>
                               <MapPin size={14} style={{ marginTop: '2px' }} />
@@ -617,11 +636,11 @@ const Drivers = () => {
                             </td>
                             <td style={{ padding: '16px 24px' }}>
                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                  <Truck size={16} color="rgba(255,255,255,0.4)" />
+                                  <Truck size={16} color="var(--text-muted)" />
                                   <div>
                                      <p style={{ margin: 0, fontSize: '0.85rem' }}>{d.driver_profile?.truck_type || 'General'}</p>
                                      <span style={{ fontSize: '0.7rem', background: 'var(--border)', padding: '2px 6px', borderRadius: '4px', color: 'var(--text-muted)', marginRight: '4px' }}>{d.driver_profile?.truck_number || 'N/A'}</span>
-                                     <span style={{ fontSize: '0.7rem', background: 'var(--primary)', padding: '2px 6px', borderRadius: '4px', color: 'var(--text-main)' }}>{d.driver_profile?.truck_capacity ? d.driver_profile.truck_capacity + 'T' : 'N/A'}</span>
+                                     <span style={{ fontSize: '0.7rem', background: 'var(--primary)', padding: '2px 6px', borderRadius: '4px', color: 'white', fontWeight: '600' }}>{d.driver_profile?.truck_capacity ? d.driver_profile.truck_capacity + 'T' : 'N/A'}</span>
                                   </div>
                                </div>
                             </td>
@@ -631,6 +650,17 @@ const Drivers = () => {
                                       <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                                          {Number(d.driver_location.latitude).toFixed(4)}, {Number(d.driver_location.longitude).toFixed(4)}
                                       </span>
+                                      <div style={{ display: 'flex', gap: '4px', marginTop: '2px' }}>
+                                         {d.driver_location.speed_kmh > 0 ? (
+                                            <span style={{ fontSize: '0.7rem', color: '#10b981', background: 'rgba(16, 185, 129, 0.1)', padding: '2px 6px', borderRadius: '4px', fontWeight: 'bold' }}>
+                                               ⚡ {d.driver_location.speed_kmh} km/h
+                                            </span>
+                                         ) : (
+                                            <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', background: 'var(--border)', padding: '2px 6px', borderRadius: '4px' }}>
+                                               ⏸️ Idle
+                                            </span>
+                                         )}
+                                      </div>
                                       <button 
                                          onClick={() => onDriverClick(d)} 
                                          style={{ background: 'none', border: 'none', color: 'var(--primary)', cursor: 'pointer', padding: 0, fontSize: '0.75rem', textAlign: 'left', textDecoration: 'underline' }}
@@ -796,7 +826,7 @@ const viewToggleStyle = {
   borderRadius: '10px',
   border: 'none',
   background: 'transparent',
-  color: 'rgba(255,255,255,0.4)',
+  color: 'var(--text-muted)',
   fontSize: '0.9rem',
   fontWeight: '600',
   cursor: 'pointer',
